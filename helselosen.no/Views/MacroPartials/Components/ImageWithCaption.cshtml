@@ -1,0 +1,45 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	string DefaultCrop ="800x400";
+	var Image = Model.MacroParameters["image"];
+	var ImageCrop = Model.MacroParameters["imageCrop"];
+	var typedImage = Umbraco.TypedMedia(Image);
+	//
+	// Add strings for presentation
+	string ImageDescription = (string)typedImage.GetPropertyValue("imageDescription");
+	string ImageAuthor = (string)typedImage.GetPropertyValue("imageAuthor");
+	string ImageAuthorUrl = (string)typedImage.GetPropertyValue("imageAuthorUrl");
+	string ImageLicense = (string)typedImage.GetPropertyValue("imageLicense");
+	string ImageOriginalTitle = (string)typedImage.GetPropertyValue("imageOriginalTitle");
+	string ImageUrl = "";
+	if ((string)ImageCrop != "") { ImageUrl = (string)typedImage.GetCropUrl((string)ImageCrop); }
+	else { ImageUrl = (string)typedImage.GetCropUrl(DefaultCrop); }
+	//
+		
+	// Figure caption
+	string figureCaptionHtml = "Foto: ";
+	if (ImageOriginalTitle != "")
+	{ figureCaptionHtml += ImageOriginalTitle;}
+	
+	// Add LicenseHtml
+	string LicenseHtml = "";
+	if (ImageLicense.Contains("CC"))
+	{	
+		LicenseHtml = "Bildelisens: ";
+		switch (ImageLicense) {
+			case "CC BY": LicenseHtml += "CC-By"; break;
+			case "CC BY-NC": LicenseHtml += "<a href=\"http://creativecommons.org/licenses/by-nc/4.0/\">CC BY-NC</a>"; break;
+		}
+	}
+}
+<figure>
+<div>
+	<div class="col-xs-12 full-width-no-mp">
+		<h2>Her burde det ikke vært noe..</h2>
+		<img class="img-responsive" src="@ImageUrl" alt="@ImageDescription Foto: @ImageAuthor">
+		<div class="caption-overlay">
+			<figcaption><p>@Html.Raw(figureCaptionHtml) @Html.Raw(LicenseHtml)</p></figcaption>
+		</div>
+	</div>
+</div>
+</figure>

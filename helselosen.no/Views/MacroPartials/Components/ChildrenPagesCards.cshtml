@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+	@{
+    var list = Model.Content.Children.OrderBy("UpdateDate desc");
+	
+	@:<div class="card-columns">
+    foreach(dynamic item in list){
+          <div class="card">
+			  @if (item.featuredImage != null && !(item.featuredImage is Umbraco.Core.Dynamics.DynamicNull))
+			  {
+				  <a href="@item.Url">
+   			 	@Umbraco.RenderMacro("ImageCropped", new {image=item.featuredImage, imageCrop="400x200", cssClass="card-img-top"})
+				</a>}
+   			 <div class="card-block">
+  			    <h4 class="card-title">@item.pageTitle</h4>
+  			    <p class="card-text">@item.pageSnippet</p>
+					<a href="@item.Url">Les mer</a>
+  			  </div>
+		  </div>
+	}
+	
+	@:</div>
+	
+        
+    }
+
+
+        
+  

@@ -1,0 +1,33 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	int authorId = 1099; //default authorId here
+    string authorName ="";
+    string authorEmail ="";
+	string authorCity ="";
+	string authorOccupation ="";
+    string authorTwitterUsername ="";
+	string authorProfilePage ="";
+	string authorEmailHash ="";
+	
+	string authorBio = "";
+	string authorProfilePhoto ="";
+
+        authorId = int.Parse(Model.MacroParameters["authorId"].ToString());
+        var authorModel = Members.GetById(authorId);
+	
+		//string authorImage = authorModel.GetCropUrl("picture", "100x100");
+		
+		// Using gravatar instead? Replace the line above with
+		// string authorImage = "https://www.gravatar.com/avatar/" + authorEmailHash + ".jpg?s=250";
+
+        authorName = authorModel.Name.ToString();
+		authorTwitterUsername =	(string)authorModel.GetProperty("twitterUsername").Value;
+		authorEmailHash = Umbraco.CreateMd5Hash(authorEmail);
+		//authorCity = (string)authorModel.GetProperty("city").Value;
+		authorOccupation = (string)authorModel.GetProperty("occupation").Value;
+		authorBio = (string)authorModel.GetProperty("bio").Value;
+    
+}  		
+<div class="authortext">
+<p class="text-muted">Denne artikkelen er skrevet av @authorName. @authorBio</p>
+</div>

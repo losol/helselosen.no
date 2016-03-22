@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{	
+  try
+  {
+
+	string domain = "https://" + HttpContext.Current.Request.Url.Host;
+    string og_title = CurrentPage.Name; 
+	string og_description = "Helselosen er et helsemagasin på nett"; @* default description text in here *@
+	string twitterUserAuthor = "@losol";
+	string twitterUserSite = "@helselosen";
+	  
+	if (CurrentPage.header != null && !(CurrentPage.header is Umbraco.Core.Dynamics.DynamicNull))
+	{ og_title = "@CurrentPage.header";}
+	
+  	@* Check if this page has snippet, and use it exists *@
+  	if(CurrentPage.snippet != null && !(CurrentPage.snippet is Umbraco.Core.Dynamics.DynamicNull))
+	{ og_description = @CurrentPage.snippet; }
+  
+  	string og_image = ""; 
+  	if (CurrentPage.featuredImage != null && !(CurrentPage.featuredImage is Umbraco.Core.Dynamics.DynamicNull))
+	{	og_image = @Umbraco.Media(CurrentPage.featuredImage).Url;}
+  	else { og_image = @Umbraco.Media(CurrentPage.AncestorsOrSelf(1).First().featuredImage).Url; }
+	  
+	  
+
+		<meta name="twitter:title" content="@og_title">
+		<meta name="twitter:description" content="@og_description">
+		<meta name="twitter:image:src" content="@domain@og_image">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:site" content="@twitterUserSite">
+		<meta name="twitter:creator" content="@twitterUserAuthor">
+  }
+  catch(Exception ex)
+  {
+    //view the error
+    @ex
+  }   	
+
+}

@@ -1,0 +1,67 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	string Image = (string)Model.MacroParameters["image"];
+	string ImageCrop = (string)Model.MacroParameters["imageCrop"];
+	string ImageText = (string)Model.MacroParameters["imageText"];
+	string CardClass = (string)Model.MacroParameters["cardClass"];
+	var typedImage = Umbraco.TypedMedia(Image);
+	
+	// Add default crop
+	if (ImageCrop == "") { ImageCrop ="800x300"; }
+	
+	// Add strings for presentation
+	string ImageDescription = (string)typedImage.GetPropertyValue("imageDescription");
+	string ImageAuthor = (string)typedImage.GetPropertyValue("imageAuthor");
+	string ImageAuthorUrl = (string)typedImage.GetPropertyValue("imageAuthorUrl");
+	string ImageOriginalTitle = (string)typedImage.GetPropertyValue("imageOriginalTitle");
+	string ImageUrl = (string)typedImage.GetCropUrl((string)ImageCrop);
+	string ImageLicense = (string)typedImage.GetPropertyValue("imageLicense");
+
+	// Make photo byline
+	string BylineHtml = "Foto: ";
+	if ( ImageOriginalTitle != "" ) {
+		BylineHtml += ImageOriginalTitle + " av ";
+	}
+	if (ImageAuthorUrl != "") {
+		BylineHtml += "<a href=\"" + ImageAuthorUrl + "\" \" target=\"_blank\">" + ImageAuthor + "</a>";
+	}
+	else {
+		BylineHtml += ImageAuthor;
+	}
+	
+	// Make link to license if appropriat
+	string LicenseHtml = "";
+	string LicenseUrl ="";
+	if (ImageLicense.Contains("CC"))
+	{	
+	switch (ImageLicense) {
+		case "CC BY": 
+			LicenseUrl = "http://creativecommons.org/licenses/by/4.0/"; 
+			break;
+		case "CC BY-SA": 
+			LicenseUrl = "http://creativecommons.org/licenses/by-nc/4.0"; 
+			break;
+		case "CC BY-ND": 
+			LicenseUrl = "http://creativecommons.org/licenses/by-nd/4.0/"; 
+			break;
+		case "CC BY-NC": 
+			LicenseUrl = "http://creativecommons.org/licenses/by-nc/4.0/"; 
+			break;
+		case "CC BY-NC-SA": 
+			LicenseUrl = "http://creativecommons.org/licenses/by-nc-sa/4.0/"; 
+			break;
+		case "CC BY-NC-ND": 
+			LicenseUrl = "http://creativecommons.org/licenses/by-nc-nd/4.0/"; 
+			break;
+		}
+	LicenseHtml = "<a href=\"" + LicenseUrl + "\" target=\"_blank\">" + ImageLicense + "</a>";
+	}
+}
+<figure>
+	<div class="card @CardClass">
+		<img class="img-responsive card-img-top" src="@ImageUrl" alt="@ImageDescription Foto: @ImageAuthor">
+			<div class="card-block">
+				<p class="card-text"><figcaption>@ImageText <span class="text-muted">@Html.Raw(BylineHtml). @Html.Raw(LicenseHtml)</span></figcaption></p>
+			</div>
+	</div>
+</figure>

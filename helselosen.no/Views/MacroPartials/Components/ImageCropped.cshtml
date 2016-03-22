@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	string DefaultCrop ="800x400";
+	string ImageId = (string)Model.MacroParameters["image"];
+	
+	string ImageCrop = (string)Model.MacroParameters["imageCrop"];
+	string CssClass = (string)Model.MacroParameters["cssClass"];
+	var typedImage = Umbraco.TypedMedia(ImageId);
+	
+	if (ImageCrop == "") { ImageCrop = DefaultCrop;}
+	//
+	// Add strings for presentation
+	string ImageDescription = (string)typedImage.GetPropertyValue("imageDescription");
+	string ImageAuthor = (string)typedImage.GetPropertyValue("imageAuthor");
+	string ImageAuthorUrl = (string)typedImage.GetPropertyValue("imageAuthorUrl");
+	string ImageLicense = (string)typedImage.GetPropertyValue("imageLicense");
+	string ImageUrl = (string)typedImage.GetCropUrl(ImageCrop); 
+}
+<img class="img-fluid @CssClass" src="@ImageUrl" alt="@ImageDescription Foto: @ImageAuthor">

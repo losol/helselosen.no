@@ -1,0 +1,46 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Examine.LuceneEngine.SearchCriteria
+@{
+    if (!string.IsNullOrEmpty(Request.QueryString["search"]))
+    {
+
+        //Fetching what eva searchterm some bloke is throwin' our way
+        var q = Request.QueryString["search"].Trim();
+
+        //Fetching our SearchProvider by giving it the name of our searchprovider 
+        var Searcher = Examine.ExamineManager.Instance.SearchProviderCollection["ExternalSearcher"];
+
+        var searchCriteria = Searcher.CreateSearchCriteria(Examine.SearchCriteria.BooleanOperation.Or);
+        var query = searchCriteria
+			.Field("nodeName", q.Boost(5)).Or()
+			.Field("pageTitle", q.Boost(5)).Or()
+			.Field("pageSnippet", q.Boost(3)).Or()
+			.Field("contentHtml", q.Fuzzy()).Or()
+			.Field("contentGrid", q.Fuzzy());      
+        
+        //Searching and ordering the result by score, and we only want to get the results that has a minimum of 0.05(scale is up to 1.)
+        var searchResults = Searcher.Search(query.Compile()).OrderByDescending(x => x.Score).TakeWhile(x => x.Score > 0.05f);
+           
+    <div class="row">
+        @foreach (var item in searchResults)
+        {
+            var node = @Umbraco.Content(item.Fields["id"]);
+		<div class="col-md-4">
+			<div class="card">
+				@if (node.featuredImage != null && !(node.featuredImage is Umbraco.Core.Dynamics.DynamicNull)) 
+				{
+					<a href="@node.Url">
+						@Umbraco.RenderMacro("ImageCropped", new {image=node.featuredImage, imageCrop="300x100", cssClass="card-img-top"});
+					</a>
+				}
+			  <div class="card-block">
+				<h4 class="card-title"><a href="@node.Url">@node.Name</a></h4>
+				<p class="card-text">@node.pageSnippet</p>
+				<a href="@node.Url" class="btn btn-primary">Les mer</a>
+			  </div>
+			</div>
+		</div>
+        }
+    </div>
+    }
+}

@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    var tagList = Umbraco.TagQuery.GetAllContentTags()
+        .OrderBy(t => t.Text);
+}
+
+<ul class="col-xs-3">
+    @foreach (var tag in tagList)
+    {
+        <li>
+            <a href="/emneknagger?tag=@tag.Text">
+                @tag.Text (@tag.NodeCount)
+            </a>
+        </li>
+    }
+</ul>

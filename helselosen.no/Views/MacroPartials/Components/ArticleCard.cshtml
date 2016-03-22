@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	
+		var pageId = Model.MacroParameters["article"];
+		var page = Umbraco.TypedContent(pageId);
+		int imageId = 0;
+		
+		// Check if there is a featured image for this post
+		if (page.GetPropertyValue("featuredImage") != null && !(page.GetPropertyValue("featuredImage") is Umbraco.Core.Dynamics.DynamicNull)) 
+		{
+	      imageId = (int)page.GetPropertyValue("featuredImage");
+		}
+	<div class="card">
+		@if (imageId != 0) {
+		@Umbraco.RenderMacro("ImageCropped", new {image=imageId, imageCrop="800x200", cssClass="card-img-top"})
+		}
+			<div class="card-block">
+		<h4 class="card-title">@page.Name</h4>
+		<p class="card-text">@page.GetPropertyValue("pageSnippet")</p>
+		<a href="@page.Url" class="btn btn-primary">Les mer</a>
+	  </div>
+	</div>
+	
+			
+			
+
+	
+}

@@ -1,0 +1,98 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{	
+	string domain = "https://" + HttpContext.Current.Request.Url.Host;
+	string site_name = "helselosen.no";
+    string og_title = CurrentPage.Name; 
+	string og_image = "";
+	string og_description = "Helselosen er et helsemagasin på nett";
+	string facebookPageAuthor = "https://www.facebook.com/losol";
+	string facebookPageSite = "https://www.facebook.com/helselosen";
+	string authorName = "Ole Kristian Losvik";
+	int authorId = 1099;
+	string url = domain + CurrentPage.Url;
+	string facebookAppId = "687198978059769";
+	string twitterUserAuthor = "@losol";
+	string twitterUserSite = "@helselosen";
+	string logoUrl = domain + "/media/1006/helselosen-logo.png";
+	DateTime createDate = CurrentPage.CreateDate;
+	DateTime updateDate = CurrentPage.UpdateDate;
+	  
+	if (CurrentPage.pageTitle != null && !(CurrentPage.pageTitle is Umbraco.Core.Dynamics.DynamicNull))
+	{ og_title = CurrentPage.pageTitle;}
+	
+  	@* Check if this page has snippet, and use it exists *@
+  	if (CurrentPage.pageSnippet != null && !(CurrentPage.pageSnippet is Umbraco.Core.Dynamics.DynamicNull))
+	{ og_description = CurrentPage.pageSnippet; }
+  
+	@* Check if this page has featured image, and crop to facebook preferred crop size (1200x630px). Use parent page default image it exists *@ 	 
+  	if (CurrentPage.featuredImage != null && !(CurrentPage.featuredImage is Umbraco.Core.Dynamics.DynamicNull))
+	{	
+		var featImage = Umbraco.TypedMedia((int)CurrentPage.featuredImage);
+	 	og_image= featImage.GetCropUrl("1200x630"); }
+  	else 
+	{ 
+		og_image = Umbraco.Media(CurrentPage.AncestorsOrSelf(1).First().featuredImage).GetCropUrl("1200x630"); 
+	}
+	  
+	@* Check if author has facebook page *@
+	if ((int)CurrentPage.author >0)
+		{ 
+		authorId = (int)CurrentPage.author;
+		}
+
+    	var authorModel = Members.GetById(authorId);
+		authorName = (string)authorModel.Name; 
+		facebookPageAuthor = (string)authorModel.GetProperty("facebookProfilePage").Value; 
+	
+}	
+<meta property="og:title" content="@og_title" />
+<meta property="og:site_name" content="@site_name" />
+<meta property="og:url" content="@url" />
+<meta property="og:description" content="@og_description" />
+<meta property="og:image" content="@domain@og_image" />
+<meta property="fb:app_id" content="@facebookAppId" />
+<meta property="og:type" content="article" />
+<meta property="og:locale" content="nb_NO" />
+<meta property="article:author" content="@facebookPageAuthor" />
+<meta property="article:publisher" content="@facebookPageSite" />
+<meta name="twitter:title" content="@og_title" />
+<meta name="twitter:description" content="@og_description" />
+<meta name="twitter:image:src" content="@domain@og_image" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@twitterUserSite" />
+<meta name="twitter:creator" content="@twitterUserAuthor" />
+	
+<script type="application/ld+json">
+{
+  "@@context": "http://schema.org",
+  "@@type": "NewsArticle",
+  "mainEntityOfPage":{
+    "@@type":"WebPage",
+    "@@id":"@url"
+  },
+  "headline": "@og_title",
+  "image": {
+    "@@type": "ImageObject",
+    "url": "@domain@og_image",
+    "height": 630,
+    "width": 1200
+  },
+  "datePublished": "@createDate.ToString("o")",
+  "dateModified": "@updateDate.ToString("o")",
+  "author": {
+    "@@type": "Person",
+    "name": "@authorName"
+  },
+   "publisher": {
+    "@@type": "Organization",
+    "name": "Helselosen.no",
+    "logo": {
+      "@@type": "ImageObject",
+      "url": "@logoUrl",
+      "width": "660",
+      "height": "675"
+    }
+  },
+  "description": "@og_description"
+}
+</script>

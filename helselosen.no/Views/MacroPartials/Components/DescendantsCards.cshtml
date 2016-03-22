@@ -1,0 +1,50 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{ 
+	int startNodeId = 0;
+	int maxNodes = 0;
+	int.TryParse(Model.MacroParameters["startNodeId"].ToString(), out startNodeId); //if macro hos parameter, use it
+	int.TryParse(Model.MacroParameters["maxNodes"].ToString(), out maxNodes); //if macro hos parameter, use it
+	
+	if (startNodeId == 0) 
+		{
+			startNodeId = (int)Model.Content.Id; //default to currentpage
+		}
+	if (maxNodes == 0) 
+		{
+			maxNodes = 5; // default 5 nodes
+		}
+    var startNode = Umbraco.Content(startNodeId);
+    var selection = startNode.Descendants().Where("Visible").OrderBy("CreateDate desc").Take(maxNodes);  
+	
+	if (selection.Any())
+    {
+
+		if (Model.MacroParameters["widgetTitle"] != null) 
+		{
+		  <h3>@Model.MacroParameters["widgetTitle"]</h3>
+		}		  
+
+		if (Model.MacroParameters["widgetSnippet"] != null) 
+		{
+			 <p class="card-subtitle text-muted">@Model.MacroParameters["widgetSnippet"]</p>
+		}
+
+		foreach(var item in selection) 
+		{
+			<div class="card">
+				@if (item.featuredImage != null  && !(item.featuredImage is Umbraco.Core.Dynamics.DynamicNull)) 
+				{
+					<a href="@item.Url">
+					@Umbraco.RenderMacro("ImageCropped", new {image=item.featuredImage, imageCrop="300x100", cssClass="card-img-top"})
+					</a>
+				}
+				<div class="card-block">
+				  <h4 class="card-title"><a href="@item.Url">@item.pageTitle</a></h4>
+				  <p class="card-text">@item.pageSnippet</p>
+				  <p class="card-text sr-only"><a href="@item.Url">Les mer</a></p>
+				</div>
+			</div>
+		}		 
+  	}
+}
+

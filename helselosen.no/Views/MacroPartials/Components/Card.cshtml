@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+	@{
+
+		string cardHeader = (string)Model.MacroParameters["cardHeader"];
+		string cardTitle = (string)Model.MacroParameters["cardTitle"];
+		string cardContent = (string)Model.MacroParameters["cardContent"];
+		string cardFooter = (string)Model.MacroParameters["cardFooter"];
+
+	}
+
+@cardHeader
+	@cardTitle
+	@cardContent
+	@cardFooter
+	
+<div class="card">
+  <h4 class="card-header">HEADERTEXT</h4>
+	  
+  <img data-src="..." alt="Card image">
+  <div class="card-block">
+    <h4 class="card-title">Special title treatment</h4>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+ <div class="card-footer text-muted">
+    2 days ago
+  </div>
+</div>

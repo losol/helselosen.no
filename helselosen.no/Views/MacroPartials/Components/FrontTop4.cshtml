@@ -1,0 +1,36 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{  var topp = Umbraco.Content(1052).Descendants().Where("Visible").Where("isFeatured == true").OrderBy("UpdateDate desc").Take(5);
+	int counter = 0;
+  	string cardClass = "";
+  	string cropSize = "";
+ }
+<div class="row topstories">
+	@foreach(var item in topp){
+	counter++;
+	if (counter == 1)
+	{
+				cardClass="col-md-8 firststory";
+				cropSize ="800x400";
+	}
+	else
+	{
+		cardClass="col-md-4";
+		cropSize="400x200";
+	}
+	<div class="@cardClass topstory">
+	<div class="card">
+		@if (item.featuredImage != null) 
+			{
+				<a href="@item.Url">
+				@Umbraco.RenderMacro("ImageCropped", new {image=item.featuredImage, imageCrop=cropSize, cssClass="card-img-top"})
+				</a>
+			}
+			<div class="card-block">
+			  <h4 class="card-title"><a href="@item.Url">@item.pageTitle</a></h4>
+			  <p class="card-text">@item.pageSnippet </p>
+			<p class="sr-only"><a href="@item.Url"> Les mer</a></p>
+			</div>
+	</div>
+	</div>
+	}
+</div>

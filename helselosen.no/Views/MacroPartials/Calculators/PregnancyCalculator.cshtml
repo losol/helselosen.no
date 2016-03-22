@@ -1,0 +1,451 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Umbraco.Web.Models
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"   integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="   crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/locale/nb.js"></script>
+<script src="/scripts/bootstrap-datepicker.js"></script>
+<link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<script>
+
+      function calculateDueDate () {
+		  		
+		  		var submittedDate = $('#SubmittedDate').val();
+				var dueDate = moment(submittedDate, "DD.MM.YYYY");
+				
+                if ($('#sm1').is(':checked')) {
+                    dueDate.add(282, 'days');
+                }
+                else if ($('#unnf').is(':checked')) {
+                    dueDate.add(268, 'days');
+                }
+           
+		  
+                var absUrl = stripQuerystring(window.location.href); 
+                var QueryUrl = absUrl + '?termin=' + dueDate.format("YYYY-MM-DD");
+				if ($('#fagperson').is(':checked')) {
+					QueryUrl+= '&fagperson=ja';
+				}
+					QueryUrl+= '#termindato';
+                window.location.href = QueryUrl;
+            };
+		  
+	function stripQuerystring(url) {
+  		return url.split("?")[0].split("#")[0];
+	};
+    </script>
+		  
+<!-- Svangerskapskalkulator skjema start -->
+<div class="hidden-print" id="PregnancyForm">
+    <form class="form-horizontal" name="pregnantForm" id="pregForm">
+        <fieldset>
+            
+		<!-- Datoen -->
+            <div class="form-group">
+                <label class="col-md-4 control-label " for="datoen">Dato (DD.MM.ÅÅÅÅ)</label>
+                <div class="col-md-5">
+					
+					<div class="form-group input-group date">
+					  <input type="text" class="form-control" id="SubmittedDate"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+					</div>
+                </div>
+			</div>
+
+
+            <!-- Datotype -->
+            <div class="form-group" ng-init="pregnant.DateType=SM1">
+                <label class="col-md-4 control-label" for="datotype">Datoen er</label>
+                <div class="col-md-4">
+                    <div class="radio">
+                        <label for="datotype-0">
+                            <input name="datotype" id="sm1" value="SM1" type="radio" checked>
+                            F&oslash;rste dag i siste menstruasjon
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label for="datotype-1">
+                            <input name="datotype" id="unnf" value="Unnfangelsen" type="radio">
+                            Unnfangelsen
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label for="datotype-2">
+                            <input name="datotype" id="term" value="Termin" type="radio">
+                            Termindato
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+			<!-- Helsepersonell? -->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="fagperson">Er du helsepersonell?</label>
+			  <div class="col-md-4">
+			  <div class="checkbox">
+				<label for="fagperson">
+				  <input type="checkbox" name="fagperson" id="fagperson" value="fagperson">
+				  Lege/jordmor
+				</label>
+				</div>
+			  </div>
+			</div>
+            <!-- Send avgårde til skriptet -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="beregn">Regn ut</label>
+
+                <div class="col-md-8">
+                    <button id="Calculate" type="button" class="btn btn-primary" onclick="calculateDueDate()" >Kontroller og termin</button>
+
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script>   
+$(document).ready(function() {
+		$('#SubmittedDate').datepicker({
+		format: "dd.mm.yyyy",
+		weekStart: 1,
+		startView: 1,
+		todayBtn: "linked",
+		language: "nb",
+		orientation: "bottom auto",
+		calendarWeeks: true,
+		autoclose: true
+		});
+	});
+
+
+</script>				
+    <!-- Svangerskapskalkulator skjema slutt -->
+
+
+
+    @functions{
+
+        public static readonly System.Globalization.CultureInfo norsk = new System.Globalization.CultureInfo("nb-NO");
+        public class TimelineElement
+        {
+            public DateTime Date { get; set; }
+            public string Title { get; set; }
+            public string Content { get; set; }
+            public string Icon { get; set; }
+            public string Color { get; set; }
+            public bool Inverted { get; set; }
+
+            public override string ToString()
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+                if (Inverted == true) { sb.Append("<li class=\"timeline-inverted\">"); }
+                else { sb.Append("<li>"); }
+
+
+                sb.Append("<div class=\"timeline-badge " + Color + "\"><i class=\"glyphicon " + Icon + "\"></i></div><div class=\"timeline-panel\">");
+                sb.Append("<div class=\"timeline-heading\"><h4 class=\"timeline-title\">" + Title);
+                sb.Append("</h4><p><small class=\"text-muted\"><i class=\"glyphicon glyphicon-time\"></i>" + Date.ToShortDateString() + "</small></p></div>");
+                sb.AppendFormat(norsk, "<div class=\"timeline-body\"><p>" + Content + "</div></div></li>");
+                return sb.ToString();
+            }
+        } //END public class TimelineElement
+
+        public string MakeTimelineHtml(List<TimelineElement> model)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append("<div class=\"container\"><ul class=\"timeline\">");
+            foreach (var TimelineElement in model)
+            {
+                sb.Append(TimelineElement.ToString());
+            }
+            sb.Append("</ul></div>");
+            return sb.ToString();
+        } //END MakeTimelineHtml
+
+        public string UkestartDato(DateTime DayZero, int uker)
+        {
+            int DagerTilMandag = 0;
+            if (DayZero.DayOfWeek == DayOfWeek.Saturday) { DagerTilMandag = 2; }
+            if (DayZero.DayOfWeek == DayOfWeek.Sunday) { DagerTilMandag = 1; }
+            return DayZero.AddDays(7 * uker + DagerTilMandag).ToShortDateString();
+        }
+        public string UkesluttDato(DateTime DayZero, int uker)
+        {
+            int DagerFraFredag = 0;
+            if ((int)DayZero.DayOfWeek == 6) { DagerFraFredag = 1; }
+            if ((int)DayZero.DayOfWeek == 7) { DagerFraFredag = 2; }
+            return DayZero.AddDays(7 * uker - DagerFraFredag).ToShortDateString();
+        }
+    }
+
+    @{
+        String errormessage = "";
+        DateTime TerminDato = DateTime.Now;
+        
+        Boolean IsPregnant = false;
+        Boolean IsDoctor = false;
+        Boolean MakeControlTable = false;
+        Boolean MakePregnancyTimeline = false;
+
+        try
+        {
+            if (Request["gravid"] != "nei") { IsPregnant = true; };
+            if (Request["fagperson"] == "ja") { IsDoctor = true; };
+            if (Request["termin"] != null) {
+                TerminDato = DateTime.ParseExact(Request["termin"], "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                MakeControlTable = true;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            @ex;
+        }
+
+
+        if (MakeControlTable)
+        {
+
+
+            int PregDays = 0;
+			int PregDaysLeft = 0;
+            int PregWeeks = 0;
+            int PregPlusDays = 0;
+            int PregPercent = 0;
+            int PregCheckNo = 0;
+
+
+            DateTime UserSubmittedDate;
+
+            String PregWeekAndDay = "";
+            DateTime Day0 = DateTime.Now;
+            DateTime Today = DateTime.Now;
+
+           // DateTime TerminWHO = DateTime.Now; // WHO, Naegeles regel
+           // DateTime TerminBergen = DateTime.Now; // Terminhjulet, Bergen
+           // DateTime TerminSnurra = DateTime.Now; // Snurra
+
+            try
+            {
+                // Does user want table or timeline?
+            //    MakeControlTable = (Request["program"] == "program") ? true : false;
+             //   MakePregnancyTimeline = (Request["timeline"] == "timeline") ? true : false;
+
+
+                // Get form data
+            //    UserSubmittedDate = Convert.ToDateTime(Request["termin"]);
+            //    String DatoType = Request["datotype"].ToString();
+            //    IsPregnant = (Request["lesergravid"] == "on") ? true : false;
+            //    IsDoctor = (Request["leserlege"] == "on") ? true : false;
+
+                // Estimate day zero
+                // int SyklusLengde = Convert.ToInt16(Request["sykluslengde"]);
+                // switch(DatoType) {
+                //     case "Termin": Day0 = UserSubmittedDate.AddDays(-283); break;
+                //    case "Unnfangelsen": Day0 = UserSubmittedDate.AddDays(-14); break;
+                //    default: Day0 = UserSubmittedDate; break; }
+                Day0 = TerminDato.AddDays(-283);
+
+                // Store date and datetype in cookie
+                HttpCookie MorKake = new HttpCookie("MorKake");
+                MorKake.Value = TerminDato.ToShortDateString();
+                MorKake.Expires = TerminDato.AddYears(1); // For a cookie to effectively never expire
+                Response.Cookies.Add(MorKake);
+
+                // Estimate svangerskapslengde
+                TimeSpan PregDaysSpan = Today - Day0;
+                PregDays = (int)(PregDaysSpan.Days);
+				PregDaysLeft = 283 - PregDays;
+                PregWeeks = (int)(PregDays / 7);
+                PregPlusDays = (int)(PregDays - (7 * PregWeeks));
+
+                // Predict date of birth
+                // TerminWHO = Day0.AddDays(280);
+                //TerminBergen = Day0.AddDays(282);
+                //TerminSnurra = Day0.AddDays(283);
+
+                // Beregn andel av svangerssapet fullført
+                PregPercent = Convert.ToInt16(PregDays / 2.83);
+
+                // Which checkup is this?
+                if (PregDays <= 15 * 7) { PregCheckNo = 1; }
+                else if ((PregDays > 15 * 7) && (PregDays <= 20 * 7)) { PregCheckNo = 2; }
+                else if ((PregDays > 20 * 7) && (PregDays <= 25 * 7)) { PregCheckNo = 3; }
+                else if ((PregDays > 25 * 7) && (PregDays <= 30 * 7)) { PregCheckNo = 4; }
+                else if ((PregDays > 30 * 7) && (PregDays <= 34 * 7)) { PregCheckNo = 5; }
+                else if ((PregDays > 34 * 7) && (PregDays <= 37 * 7)) { PregCheckNo = 6; }
+                else if ((PregDays > 37 * 7) && (PregDays <= 39 * 7)) { PregCheckNo = 7; }
+                else if ((PregDays > 39 * 7) && (PregDays <= 41 * 7)) { PregCheckNo = 8; }
+                else if ((PregDays > 41 * 7)) { PregCheckNo = 9; }
+
+
+            }
+
+             // #FML.. WTF?
+            catch (Exception e)
+            {
+                errormessage = "Feilmelding: " + e.ToString();
+            }
+
+
+
+            <text>
+				<a name="termindato"></a>
+                <div class="alert alert-success" role="alert">
+					<p>Du er gravid i uke @PregWeeks + @PregPlusDays dager</p>
+					<p>Termin er: @TerminDato.ToLongDateString()</p>
+					<p class="text-muted hidden-print">Termindatoen er den mest sannsynlige datoen for fødsel, men stemmer bare i 5% av tilfellene. Verdens helseorganisasjon (WHO) regner svangerskapet til å være 280 dager, mens terminhjulet fra Bergen antar at det er 282 dager. Vi bruker den trøndersk snurra, fordi den er mest presis, og beregner svangerskapet til å være 283 dager. Når du har vært på ultralyd, så er det ultralydbestemt termin som er den mest riktige.</p>
+				</div>
+
+			<p>Under er en oversikt over når svangerskapskontrollene er. Vi har lagt inn omtrentlig dato. Du velger fritt om du vil gå til lege eller jordmor eller begge. Det er fint om du tar med en morgenurinprøve til alle kontrollene. </p>
+            
+					</text>
+
+            if (MakeControlTable == true)
+            {
+                // Lag den gigantiske kontrolltabellen.
+                string[,] arrayKontrollprogram = new string[9, 3];
+
+                arrayKontrollprogram[0, 0] = String.Format(norsk, "Uke 12<br>{0}", UkestartDato(Day0, 12));
+                arrayKontrollprogram[0, 1] = String.Format(norsk, @"Den første ordinære kontroll kan du gjøre fra uke 8, men blodprøvene kan først tas fra {0}.
+            På kontrollen skal svangerskapskortet fylles ut og du vil få informasjon om ultralydundersøkelse, kosthold, ernæring og mosjon.
+            I tillegg gis råd om folat, d-vitamin, jod, kalsium.
+            Legen spør også om tobakk og rusmidler.
+														   <br>Legen undersøker også <ul>
+														  <li>vekt og høyde
+<li>blodtrykk (gjøres ved alle kontroller)
+<li>prøver for blodtype og antistoffer, blodprosent/hemoglobin, røde hunder, HIV og syfilis (hepatitt B og hepatitt C hos noen)
+<li>urinprøver av morgenurin for protein og glukose (gjøres ved hver kontroll)
+</ul>Jordmor eller lege sender henvisning til ultralyd og fødested ved første svangerskapskonsultasjon.", UkestartDato(Day0, 12));
+                arrayKontrollprogram[0, 2] = @"
+            <p>US: cor/pulm, bt, høyde/vekt/BMI
+            <p>Cytologi hvis >25 år og >3 år siden forrige prøve
+            <p>Urin: Dyrkes hos alle. Hvis positiv tas kontroll 1-2 uker etter første prøve. Dersom den viser fortsatt samme bakterie: behandle, og kontroller urin dyrkning hver 4. uke resten av svangerskapet.
+            <p>Lab: Hb (hvis <10, ta MCV, forsøk behandling og ny kontroll), blodtyping, rhesus, antistoffer (kan ikke tas før uke 12). HIV og syfilis. Hepatitt og toxoplasmose på indikasjon.
+			<p>Klamydia hvis <25 år
+            <p>Ultralyd uke 17-19.  Tidligere ultralyd gjøres på spesielle indikasjoner: usikker termin, blødning i svangerskapet, mistanke om flerlingsvangerskap, psykologiske årsaker (ved bekymringer)
+            Henvise fødeavdeling
+            ";
+
+                arrayKontrollprogram[1, 0] = String.Format("Uke 17-19<br>{0}", UkestartDato(Day0, 18));
+                arrayKontrollprogram[1, 1] = "Alle gravide får tilbud om ultralydundersøkelse i uke 17-19. Her får man sett hjerne, hjerte, armer og bein. På undersøkelsen ser man antall fostre (tvillinger, trillinger), morkakens plassering i livmoren og så gjør man målinger av fosterets mage- og hodediameter for å justere termindato. Ultralydundersøkelsen gjøres vanligvis på poliklinikken der du skal føde. ";
+                arrayKontrollprogram[1, 2] = "Frivillig ultralydundersøkelse: bestemme termin, flerlinger, morkakebeliggenhet, fosteranatomi, mengde fostervæske";
+
+                arrayKontrollprogram[2, 0] = String.Format("Uke 24<br/>{0}", UkestartDato(Day0, 24));
+                arrayKontrollprogram[2, 1] = "Her går man gjennom om det er noen spørsmål fra ultralydundersøkelsen. På denne og alle de neste kontrollene måles størrelsen på livmoren, det vi kaller symfyse-fundusmålet. I tillegg vil legen/jordmoren lytte etter fosterets hjertelyd.<p>Risikoen for svangerskapsdiabetes vurderes ved denne kontrolle. Gravide som vi regner har litt høyere risiko er de som  <ul><li>er >38 år</li><li>har søsken eller foreldre med diabetes</li><li>har KMI>27 ved svangerskapets start</li><li>tidligere har hatt svangerskapsdiabetes</li><li>er fra India, Pakistan, Bangladesh, Sri Lanka (det indiske subkontinent) eller Nord-Afrika.</li></ul><p>For alle disse skal det avtales glukosebelastning mellom uke 26 og 28. ";
+                arrayKontrollprogram[2, 2] = @"Fosterbevegelser, plager og bekymringer.</br>
+            SF, fosterlyd</br>
+            BT, vekt, urin</br>
+            Blodprøve for påvisning av føtale blodtypeantigener hos rhesus-negative kvinner
+            ";
+
+                arrayKontrollprogram[3, 0] = String.Format("Uke 28<br/>{0}", UkestartDato(Day0, 28));
+                arrayKontrollprogram[3, 1] = "Begynner å bli rutine dette nå. Denne gangen skal blodprosenten sjekkes igjen. Dersom du ønsker å delta på fødselsforberedende kurs ordner dere henvisning i dag.";
+                arrayKontrollprogram[3, 2] = @"Fosterbevegelser, plager og bekymringer. <br>
+            SF, evt fosterlyd <br>
+            BT, vekt, urin <br>
+            Glukosebelastning for risikogrupper";
+
+                arrayKontrollprogram[4, 0] = String.Format("Uke 32<br/>{0}", UkestartDato(Day0, 32));
+                arrayKontrollprogram[4, 1] = "Du blir spurt om du vil besøke fødeavdelingen. Hvis blodprøven vi tok på første kontroll viser at du er rhesus negativ, så tar vi nye blodprøver i uke 32 og 36.";
+                arrayKontrollprogram[4, 2] = @"Fosterbevegelser, plager og bekymringer.  <br>
+            SF, evt fosterlyd <br>
+            BT, vekt, urin<br>
+			Evt rhesus-kontroll";
+
+                arrayKontrollprogram[5, 0] = String.Format("Uke 36<br/>{0}", UkestartDato(Day0, 36));
+                arrayKontrollprogram[5, 1] = "På denne kontrollen snakker vi mer om tegn på at fødselen er i gang. I tillegg blir vi mer opptatt av om babyen har hodet ned. Hvis vi mistenker at rumpa er nede i bekkenet ditt, så vil du bli henvist til ultralyd. ";
+                arrayKontrollprogram[5, 2] = @"Fosterbevegelser, plager og bekymringer.  <br>
+            SF, fosterleie, fosterlyd <br>
+            BT, vekt, urin<br>
+			 Evt rhesus-kontroll";
+
+                arrayKontrollprogram[6, 0] = String.Format("Uke 38<br/>{0}", UkestartDato(Day0, 38));
+                arrayKontrollprogram[6, 1] = "De siste kontrollene er omtrent som alle de andre. Vi spør om bevegelser, bekymringer og spark. Og, har du pakka fødebaggen?";
+                arrayKontrollprogram[6, 2] = @"Fosterbevegelser, plager og bekymringer.  <br>
+            SF, fosterleie, fosterlyd <br>
+            BT, vekt, urin";
+
+                arrayKontrollprogram[7, 0] = String.Format("Uke 40<br/> {0}", UkestartDato(Day0, 40));
+                arrayKontrollprogram[7, 1] = "Dette er siste vanlige kontroll i primærhelsetjenesten. Hvis det ikke skjer noe snart nå, så vil du få innkalling til vurdering ved fødeavdelingen";
+                arrayKontrollprogram[7, 2] = @"Fosterbevegelser, plager og bekymringer.  <br>
+            SF, fosterleie, fosterlyd <br>
+            BT, vekt, urin <br>
+            Henvise til overtidsvurdering.";
+
+                arrayKontrollprogram[8, 0] = String.Format("Uke 41-42<br/> {0}", (Day0.AddDays(287).ToShortDateString()));
+                arrayKontrollprogram[8, 1] = "Kontrollene overtas av spesialisthelsetjenesten.";
+                arrayKontrollprogram[8, 2] = "Overtidskontroller i spesialisthelsetjenesten.";
+
+                System.Text.StringBuilder KontroltabellHtml = new System.Text.StringBuilder("");
+                KontroltabellHtml.Append("<div class=\"tab-content\">");
+                KontroltabellHtml.Append("<table class=\"table table-striped table-hover tablecondensed data-table\">");
+
+                KontroltabellHtml.Append("<tbody>");
+                KontroltabellHtml.Append("<tr><th>Kontroll</th>");
+                if (IsPregnant == true) { KontroltabellHtml.Append("<th>Informasjon til den gravide</th>"); }
+                if (IsDoctor == true) { KontroltabellHtml.Append("<th>Huskeliste for lege/jordmor</th>"); }
+                KontroltabellHtml.Append("</tr>");
+
+                for (int row = 0; row < arrayKontrollprogram.GetLength(0); row++)
+                {
+                    if (row + 1 == PregCheckNo) { KontroltabellHtml.Append("<tr class=\"success\">"); }
+                    else { KontroltabellHtml.Append("<tr>"); }
+
+                    for (int column = 0; column < arrayKontrollprogram.GetLength(1); column++)
+                    {
+                        try
+                        {
+                            if (column == 0 || (column == 1 && IsPregnant == true) || (column == 2 && IsDoctor == true))
+                            {
+                                KontroltabellHtml.AppendFormat(norsk, "<td>" + arrayKontrollprogram[row, column].ToString() + "</td>");
+                            }
+                        }
+                        catch
+                        {
+                            KontroltabellHtml.Append("<td></td>");
+                        }
+                    }
+                    KontroltabellHtml.Append("</tr>");
+                }
+                KontroltabellHtml.Append("</tbody>");
+
+
+                KontroltabellHtml.Append("</table>");
+
+
+
+                <text>
+                    @Html.Raw(KontroltabellHtml)
+
+                </text>
+            } //END if for MakeControlTable
+
+
+            if (MakePregnancyTimeline == true)
+            {
+                // Lag den gigantiske tidslinja.
+                var timeline = new List<TimelineElement>();
+                timeline.Add(new TimelineElement
+                {
+                    Date = Day0,
+                    Title = "Siste menstruasjons første dag",
+                    Content = "Dette regnes som første dag også av svangerskapet. ",
+                    Icon = "glyphicon-log-out",
+                    Color = "warning"
+                });
+                timeline.Add(new TimelineElement
+                {
+                    Date = Day0.AddDays(13),
+                    Title = "Befruktning",
+                    Content = "En av dagene rundt denne datoen ble mest sannsynlig egget befruktet",
+                    Icon = "glyphicon-log-in",
+                    Inverted = true
+                });
+
+                <text>
+                    @Html.Raw(MakeTimelineHtml(timeline));
+                </text>
+
+            } //END of if preg timeline
+        } //END of code?
+    }

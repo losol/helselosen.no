@@ -1,0 +1,46 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Umbraco.Core.Models
+@using Umbraco.Web
+@using System.Linq;
+@{ Layout = null;
+Response.ContentType = "text/xml";
+}<?xml version='1.0' encoding='UTF-8' ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemalocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+@ListChildNodes(Model.Content.AncestorOrSelf(1))
+</urlset>
+
+@helper ListChildNodes(IPublishedContent startNode)
+{
+    const int maxLevelForSiteMap = 100;
+    
+    foreach (var node in startNode.Children.Where(x => Umbraco.MemberHasAccess(x.Id, x.Path)).Where(x => !Umbraco.IsProtected(x.Id, x.Path)).Where(x => x.IsVisible()))
+    {
+        if (node.TemplateId > 0)
+        {
+            <url>
+                <loc>@node.UrlWithDomain()</loc>
+                <lastmod>@(string.Format("{0:s}+00:00", node.UpdateDate))</lastmod>
+                @{
+                    var freq = node.GetPropertyValue<string>("SearchEngineSitemapChangeFreq");
+                    var pri = node.GetPropertyValue<string>("SearchEngineSitemapPriority");
+                }
+
+                @if (!string.IsNullOrEmpty(freq))
+                {
+                    <changefreq>@freq</changefreq>
+                }
+                @if (!string.IsNullOrEmpty(pri))
+                {
+                    <priority>@pri</priority>
+                }
+            </url>
+        }
+
+        if (node.Level <= maxLevelForSiteMap && node.Children.Any())
+        {
+            @ListChildNodes(node)
+        }
+    }
+}

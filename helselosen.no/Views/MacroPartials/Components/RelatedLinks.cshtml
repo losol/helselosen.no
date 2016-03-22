@@ -1,0 +1,26 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using System
+@{
+
+@:<div class="callout callout-warning">
+<h4>Les også</h4>
+
+    if (CurrentPage.HasValue("relatedLinks") && CurrentPage.relatedLinks.ToString().Length > 2)
+    {
+        <ul>
+            @foreach (var item in CurrentPage.relatedLinks)
+            {
+                var linkUrl = (bool)item.isInternal ? Umbraco.NiceUrl(item.Value<int>("internal")) : item.link;
+                var linkTarget = (bool)item.newWindow ? "_blank" : null;
+                <li><a href="@linkUrl" target="@linkTarget">@item.caption</a></li>
+            }
+        </ul>
+    }
+  
+	
+	
+@:</div>
+	
+
+    
+}

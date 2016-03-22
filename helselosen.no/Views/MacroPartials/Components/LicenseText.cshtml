@@ -1,0 +1,32 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	string authorName = "Ole Kristian Losvik";
+	string licenseType = "CC BY";
+	string licenseUrl = "http://creativecommons.org/licenses/by/4.0/";
+	
+	if (CurrentPage.HasValue("pageLicense"))
+	{
+		licenseType = CurrentPage.pageLicense.ToString();
+	}
+	
+	switch (licenseType) {
+	    case "Alle rettigheter reservert":
+			licenseUrl = "/info/lisenser/";
+			break;
+		case "CC BY":
+			licenseUrl = "https://creativecommons.org/licenses/by/4.0";
+			break;	
+		case "CC BY-SA":
+			licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/";
+			break;	
+
+	}
+}
+<p class="text-muted">
+<span xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/terms/">
+Artikkelen
+	<span rel="dc:type" href="http://purl.org/dc/dcmitype/Text" property="dc:title">@Umbraco.Field("pageTitle", altFieldAlias: "pageName", altText: " ")</span> av 
+<span property="cc:attributionName">@authorName</span> 
+er publisert under lisensen 
+<a rel="license" href="@licenseUrl">@licenseType</a>. 
+</span></p>

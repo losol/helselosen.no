@@ -1,0 +1,107 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	var selection = Umbraco.Content(2227).Children.Where("Visible");
+	int counter1 = 0;
+	int counter2 = 0;
+}
+
+<section id="jumbotron">
+ <div id="carousel" class="carousel slide carousel-fade"><!-- CAROUSEL -->
+  <div class="row"><div class="col-md-8 slide-col-1">
+   <div class="carousel-inner">
+
+
+@foreach(var item in selection){
+try {
+	string cssClass = "item";
+	counter1++;
+	if (counter1 == 1) { cssClass = "item active";}
+          var itemPage = Umbraco.Content(item.page);
+          var featImage = Umbraco.TypedMedia((int)itemPage.featuredImage);
+          string ImageDescription = (string)featImage.GetPropertyValue("imageDescription");
+          string ImageAuthor= (string)featImage.GetPropertyValue("imageAuthor");
+                        
+                       <!-- ITEM -->
+ 						<div class="@cssClass">
+                            <img src="@featImage.GetCropUrl("800x400")" alt="@ImageDescription">
+                            <div class="filmgrain"></div>    
+                            <div class="carousel-caption">
+                                <h3><a href="@itemPage.Url" class="h3">@itemPage.Name</a></h3>
+                                <p class="by-line">@itemPage.Parent.Name</p>
+                                <p><a href="@itemPage.Url">@itemPage.snippet</a></p>
+                            </div>
+                        </div>
+                      
+          }
+    
+     
+catch(Exception ex)
+    {
+          <p>@ex</p>
+    }         	
+		}		
+				
+																		
+	</div>
+
+		
+<!-- CAROUSEL CONTROLS -->
+<a class="left carousel-control" href="#carousel" data-slide="prev">
+			<span class="icon-prev"><i class="fa fa-chevron-left"></i></span>
+				</a>
+<a class="right carousel-control" href="#carousel" data-slide="next">
+					<span class="icon-next"><i class="fa fa-chevron-right"></i></span>
+						</a>
+</div>
+						
+
+<!-- CAROUSEL SIDEBAR -->
+<div class="col-md-4 slide-col-2 hidden-sm hidden-xs">
+<ul class="carousel-indicators">
+
+	
+								
+								
+								
+@foreach(var item in selection){
+try {
+	string cssClass = "";
+	int slideTo = counter2;
+	counter2++;
+	
+	if (counter2 == 1) { cssClass = "active";}
+	
+          var itemPage = Umbraco.Content(item.page);
+          // Check if there is a featured image for this post
+          if (itemPage.featuredImage != null && !(itemPage.featuredImage is Umbraco.Core.Dynamics.DynamicNull)) {
+              var featImage = Umbraco.TypedMedia((int)itemPage.featuredImage);
+               string ImageDescription = (string)featImage.GetPropertyValue("imageDescription");
+               string ImageAuthor= (string)featImage.GetPropertyValue("imageAuthor");
+                        
+       <li data-target="#carousel" data-slide-to="@slideTo" class="@cssClass">
+                                <div class="item-img">
+                                    <div class="dot-overlay"></div>
+                                    <img src="@featImage.GetCropUrl("square100")" alt="">
+                                </div>
+                                <div class="slide-preview">
+                                    <p>@itemPage.Name</p>
+                                    <p class="by-line"><span>@itemPage.Parent.Name</span></p>
+                                </div>
+                            </li>
+          }
+    
+     }
+catch(Exception ex)
+    {
+          <p>@ex</p>
+    }         
+		}										   
+												   
+												   
+
+							
+	                    </ul>
+                    </div><!-- END CAROUSEL PREVIEW -->
+                </div> 
+            </div><!-- END CAROUSEL -->
+        </section>

@@ -1,0 +1,74 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+<div id="navigationbar">
+<nav class="navbar navbar-dark bg-primary hidden-print">
+	<a href="/"><i class="fa fa-home"></i><span class="sr-only">Forsiden</span></a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerMenu">
+		&#9776;&nbsp;Meny
+	  </button>
+		<button class="navbar-toggler hidden-sm-down" type="button" data-toggle="collapse" data-target="#headerNews" >
+		 <i class="fa fa-newspaper-o"></i>&nbsp;Nyheter
+	  </button>
+	<button class="navbar-toggler hidden-sm-down" type="button" data-toggle="collapse" data-target="#headerMagazine" >
+		 <i class="fa fa-book"></i>&nbsp;Magasin
+	  </button>
+	@*	<button class="navbar-toggler hidden-sm-down" type="button" data-toggle="collapse" data-target="#headerLMS">
+		<i class="fa fa-graduation-cap"></i>&nbsp;Nettkurs
+	  </button> *@
+
+	<button class="navbar-toggler pull-xs-right" type="button" data-toggle="collapse" data-target="#searchCollapsible">
+		 <i class="fa fa-search"></i>
+	  </button>
+	@* <button class="navbar-toggler pull-xs-right" type="button" data-toggle="collapse" data-target="#loginCollapsible">
+		 <i class="fa fa-user"></i><span class="hidden-sm-down">&nbsp;Logg inn</span>
+	  </button> *@
+</nav>
+			 
+<div class="collapse" id="headerMenu">
+	<div class="container-fluid">
+		<div class="row bg-inverse p-a-1">
+			@Umbraco.RenderMacro("HeaderMenu")
+		 </div><!-- row -->
+	</div><!-- container-fluid -->
+</div>
+			
+<div class="collapse" id="headerNews">
+	<div class="container-fluid">
+		<div class="row bg-inverse p-a-1">
+			@Umbraco.RenderMacro("HeaderNews")
+		 </div><!-- row -->
+	</div><!-- container-fluid -->
+</div>
+	  
+<div class="collapse" id="headerMagazine">
+	<div class="container-fluid">
+		<div class="row bg-inverse p-a-1">
+			@Umbraco.RenderMacro("HeaderMagazine")
+		 </div><!-- row -->
+	</div><!-- container-fluid -->
+</div>
+			
+<div class="collapse" id="headerLMS">
+	<div class="container-fluid">
+		<div class="row bg-inverse p-a-1">
+			<h3>Nettkurs kommer snart</h3>
+			<p>Ta kontakt med oss for mer informasjon</p>
+		 </div>
+	</div>
+</div>
+			
+<div class="collapse" id="searchCollapsible">
+  <div class="bg-inverse p-a-1">
+    <h4>Søk på helselosen.no</h4>
+  <form class="form-inline" method="GET" action="/info/soekeresultater">
+    <input class="form-control" type="text" name="search" placeholder="Skriv inn søketekst">
+    <button class="btn btn-success-info" type="submit"><i class="fa fa-search"></i>Søk</button>
+  </form>
+  </div>
+
+<div class="collapse" id="loginCollapsible">
+  <div class="bg-inverse p-a-1">
+    <h4>Logg inn på helselosen.no</h4>
+  	@Umbraco.RenderMacro("SocialLogin")
+  </div>
+</div>
+</div>

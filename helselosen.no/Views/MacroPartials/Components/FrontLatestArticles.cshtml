@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	// ids: Home/toplevel page 1052,  page - standard template 1137, page - news template 1140
+		var list = Umbraco.Content(1052).Descendants().Where("NodeTypeAlias == \"pageSimple\" || NodeTypeAlias == \"pageNews\" || NodeTypeAlias == \"pageMagazine\"").Where("!umbracoNaviHide").OrderBy("UpdateDate desc").Take(15);
+			foreach(dynamic item in list){
+				<div class="card">
+					@if (item.featuredImage != null && !(item.featuredImage is Umbraco.Core.Dynamics.DynamicNull))
+						{
+						<a href="@item.Url">
+						@Umbraco.RenderMacro("ImageCropped", new {image=item.featuredImage, imageCrop="400x200", cssClass="card-img-top"})
+						</a>}
+				<div class="card-block">
+					<h4 class="card-title">@item.pageTitle</h4>
+					<p class="card-text">@item.pageSnippet</p>
+					<a href="@item.Url">Les mer</a>
+				</div>
+				</div>
+				}    
+	}

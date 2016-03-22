@@ -1,0 +1,83 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{ 
+var nyheter = Umbraco.Content(1119).Children.Where("Visible").OrderBy("CreateDate desc").Take(5);
+var magasin = Umbraco.Content(1120).Children.Where("Visible").OrderBy("CreateDate desc").Take(5);
+var familieogbarn = Umbraco.Content(1121).Children.Where("Visible").OrderBy("Name");
+var sexogsamliv = Umbraco.Content(1122).Children.Where("Visible").OrderBy("Name");
+var graviditet = Umbraco.Content(1185).Children.Where("Visible").OrderBy("Name");
+var kosthold = Umbraco.Content(1123).Children.Where("Visible").OrderBy("Name");
+var sykdommer = Umbraco.Content(1087).Children.Where("Visible").OrderBy("Name");
+var psykiskhelse = Umbraco.Content(1086).Children.Where("Visible").OrderBy("Name");
+}
+
+<div class="col-xs-6 col-md-3 col-lg-2">
+	<h4>Sykdommer</h4>
+			 <ul class="small">
+				@foreach(var item in sykdommer){
+					<li>
+						<a href="@item.Url">@item.pageTitle</a>
+					</li>
+				}
+			 </ul>
+</div>
+<div class="col-xs-6 col-md-3 col-lg-2">
+	<h4>Familie og barn</h4>
+		<ul class="small">
+				@foreach(var item in familieogbarn){
+					<li>
+						<a href="@item.Url">@item.pageTitle</a>
+					</li>
+				}
+			 </ul>
+	<h4>Graviditet, sex og samliv</h4>
+			 <ul class="small">
+				@foreach(var item in graviditet){
+					<li>
+						<a href="@item.Url">@item.pageTitle</a>
+					</li>
+				}
+					<li>
+						<a href="/sex-og-samliv/prevensjon/prevensjonsoversikt/">Prevensjonsoversikt</a>
+					</li>
+			 </ul>
+</div>
+<div class="col-xs-6 col-md-3 col-lg-2">
+	<a href="https://helselosen.no/kosthold-og-ernaering"><h4>Kosthold og ernæring</h4></a>
+			 <ul class="small">
+				 	<li>
+						<a href="https://helselosen.no/kosthold-og-ernaering/mineraler/folat-folsyre">Folsyre</a>
+					</li>
+					<li>
+						<a href="https://helselosen.no/kosthold-og-ernaering/vitaminer/vitamin-d">Vitamin D</a>
+					</li>
+				 
+				 <li>
+						<a href="https://helselosen.no/kosthold-og-ernaering/mineraler/jern">Jern</a>
+					</li>
+				 			 <li>
+						<a href="https://helselosen.no/kosthold-og-ernaering/mineraler/kalsium">Kalsium</a>
+					</li>
+	
+			 </ul>
+</div>
+<div class="col-xs-6 col-md-3 col-lg-2">
+<h4>Nyheter</h4>
+         <ul class="small">
+           	@foreach(var item in nyheter){
+				<li>
+					<a href="@item.Url">@item.pageTitle</a>
+				</li>
+			}
+         </ul>
+</div>
+<div class="col-xs-6 col-md-3 col-lg-2">
+<h4>Magasin</h4>
+         <ul class="small">
+           	@foreach(var item in magasin){
+				<li>
+					<a href="@item.Url">@item.Name</a>
+				</li>
+			}
+         </ul>
+</div>
+			

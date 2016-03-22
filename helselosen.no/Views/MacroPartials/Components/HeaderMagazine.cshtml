@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{  var magasin = Umbraco.Content(1120).Children.Where("Visible").OrderBy("CreateDate desc").Take(5);
+ }
+<div class="card-group">
+	@foreach(var item in magasin){
+		<div class="card card-primary">
+		@if (item.featuredImage != null) 
+			{
+				@Umbraco.RenderMacro("ImageCropped", new {image=item.featuredImage, imageCrop="800x200", cssClass="card-img-top"});
+				}
+			<div class="card-block">
+			  <h4 class="card-title">@item.pageTitle</h4>
+			  <p class="card-text small">@item.pageSnippet</p>
+			  <p class="card-text"><a href="@item.Url">Les mer</a></p>
+			  <p class="card-text"><small class="text-muted">Oppdatert for 3 minutter siden</small></p>
+			</div>
+		</div>
+	}			 
+</div>

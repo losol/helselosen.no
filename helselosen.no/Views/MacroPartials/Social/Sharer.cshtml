@@ -1,0 +1,9 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using System.Web
+@{
+	string fbAppId = "687198978059769";
+	string UrlEncoded = HttpUtility.UrlEncode(@CurrentPage.Url);
+	}
+<div class="sharer"><a href="https://www.facebook.com/dialog/share?app_id=@fbAppId&display=popup&href=@UrlEncoded&redirect_uri=@UrlEncoded"><i class="fa fa-facebook-square fa-3x"></i></a><a href="https://twitter.com/share" data-via="helselosen"><i class="fa fa-twitter-square fa-3x"></i></a><a href="https://plus.google.com/share?url=@UrlEncoded&hl=no"><i class="fa fa-google-plus-square fa-3x"></i></a></div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>

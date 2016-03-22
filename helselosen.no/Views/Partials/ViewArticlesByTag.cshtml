@@ -1,0 +1,44 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+    string tag = Request.QueryString["tag"];
+
+    if (!tag.IsNullOrWhiteSpace())
+    {
+        var publishedContent = Umbraco.TagQuery.GetContentByTag(tag);
+
+        if (publishedContent.Count() > 0)
+        {
+			@Html.Raw("<div class=\"row\">")
+				
+					foreach (var item in publishedContent
+						.OrderByDescending(i => i.CreateDate))
+					{
+						<div class="col-xs-6 col-md-4">
+						  <div class="card card-block">
+						  <h4 class="card-title">@item.GetPropertyValue("pageTitle")</h4>
+						  <p class="card-text">@item.GetPropertyValue("pageSnippet")</p>
+						  <a href="@item.Url" class="card-link">Les artikkelen</a>
+							
+						
+						</div>
+					</div>
+				  } 
+			@Html.Raw("</div>")
+		} 
+        else
+        {
+           
+					<h2> Vi beklager...</h2>
+                    <p>
+                        Ingen artikler om denne emneknaggen.
+                    </p>
+
+            @Html.CachedPartial("ViewArticlesByTag", Model.Content, 86400000)
+        }
+    }
+    else
+    {
+    @Html.CachedPartial("ViewArticlesByTag", Model.Content, 86400000)
+    }
+}

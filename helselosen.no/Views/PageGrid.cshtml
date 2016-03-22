@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.PageGrid>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Page.cshtml";
+}
+<body>
+	@CurrentPage.GetGridHtml("contentGrid", "bootstrap4")
+</body>

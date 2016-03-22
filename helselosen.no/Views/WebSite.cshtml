@@ -1,0 +1,55 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.WebSite>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+    <title>Helselosen.no - et helsemagasin på nett</title>
+	<link href="/css/Helselosen.css" rel="stylesheet">	
+  </head>
+
+  <body>
+<header>
+	@Umbraco.RenderMacro("Header")
+</header>
+<main>
+	@CurrentPage.GetGridHtml("contentGrid", "bootstrap4")
+</main>
+<footer>
+	@Umbraco.RenderMacro("Footer")
+</footer>
+    <!--JavaScript ====================================================================== -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha256-GMscmjNs6MbZvXG2HRjP3MpdOGmXv078SRgH7M723Mc= sha512-1wnhBRtA+POGVA0yREk2RlDbJEdkNvMuRBGjT1FCI5wXmpiQHZWDIB8MpANBWM/GKSPDgCA/7HTrAIFgv70/Jw==" crossorigin="anonymous"></script>
+	<script src="/scripts/helselosen.js"></script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-58116063-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+	<script type="text/javascript">
+  WebFontConfig = {
+    google: { families: [ 'Lato::latin,latin-ext' ] }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })(); </script>
+  </body>
+</html>

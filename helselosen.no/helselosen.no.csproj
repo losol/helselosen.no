@@ -18,7 +18,7 @@
     <AssemblyName>helselosen.no</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -2919,6 +2919,29 @@
     <Content Include="Umbraco\Webservices\UltimatePickerAutoCompleteHandler.ashx" />
     <Content Include="Umbraco\Xslt\Web.config" />
     <Content Include="ConnectionStrings.config" />
+    <Content Include="Views\LearningPage.cshtml" />
+    <Content Include="Views\Page.cshtml" />
+    <Content Include="Views\PageArticlesByTag.cshtml" />
+    <Content Include="Views\PageCourse.cshtml" />
+    <Content Include="Views\PageGrid.cshtml" />
+    <Content Include="Views\PageLexicon.cshtml" />
+    <Content Include="Views\PagelistLexicon.cshtml" />
+    <Content Include="Views\PagelistStandard.cshtml" />
+    <Content Include="Views\PagelistWriters.cshtml" />
+    <Content Include="Views\PageMagazine.cshtml" />
+    <Content Include="Views\PageNews.cshtml" />
+    <Content Include="Views\PageSection.cshtml" />
+    <Content Include="Views\PageSimpleWithSidebar.cshtml" />
+    <Content Include="Views\PageStandard.cshtml" />
+    <Content Include="Views\PageStandardWithSidebar.cshtml" />
+    <Content Include="Views\PageVideo.cshtml" />
+    <Content Include="Views\Partials\Grid\Bootstrap4.cshtml" />
+    <Content Include="Views\Partials\ViewArticlesByTag.cshtml" />
+    <Content Include="Views\Robotstxt.cshtml" />
+    <Content Include="Views\Sitemap.cshtml" />
+    <Content Include="Views\testView.cshtml" />
+    <Content Include="Views\WebSite.cshtml" />
+    <Content Include="Views\WriterPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2936,6 +2959,12 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="css\" />
+    <Folder Include="scripts\" />
+    <Folder Include="Views\MacroPartials\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -2951,7 +2980,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54887</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54887/</IISUrl>
+          <IISUrl>https://localhost:44300/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

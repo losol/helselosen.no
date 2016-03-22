@@ -1,0 +1,40 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Page.cshtml";
+	var FeaturedImage = @CurrentPage.featuredImage;
+	string FeaturedImageSize = "800x400";
+	string FeaturedImageText = "";
+
+	string mainAuthor = "1099"; 	
+}
+	@if (CurrentPage.author >0)
+	{
+		mainAuthor = CurrentPage.author.ToString();
+	}
+<div class="container-fluid bg-light-grey m-b-2">
+			
+	@if (CurrentPage.featuredImage >0)
+	{
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1">
+						@Umbraco.RenderMacro("ImageCard", new {image=@FeaturedImage, imageText="", imageCrop="800x300", cardClass="compact"})
+				</div>
+			</div>
+	}
+
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1">
+					<h1 class="article-title pagetitle">@Umbraco.Field("heading", altFieldAlias: "pageName", altText: "Tittel")</h1></h1>
+					<p class="lead"> @Umbraco.Field("pageSnippet")</p>
+				</div>
+			</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 p-x-1">
+			@Html.Raw(CurrentPage.contentHtml) </p>
+		</div>
+	</div>
+</div>	
+			
+			

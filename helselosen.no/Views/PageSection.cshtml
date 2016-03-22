@@ -1,0 +1,30 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.PageSection>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Page.cshtml";
+}
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Page.cshtml";
+
+		var FeaturedImage = @CurrentPage.featuredImage;
+		string FeaturedImageSize = "800x400";
+		string FeaturedImageText = "";
+}
+<div class="container-fluid bg-light-grey m-b-2">
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1">
+					<h1 class="article-title pagetitle">@Umbraco.Field("heading", altFieldAlias: "pageName", altText: "Tittel")</h1></h1>
+					<p class="lead"> @Umbraco.Field("pageSnippet")</p>
+				</div>
+			</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			@Umbraco.RenderMacro("ChildrenPagesCards")
+		</div>
+	</div>
+
+</div>	
+			

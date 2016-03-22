@@ -1,0 +1,77 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.WriterPage>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Page.cshtml";
+}
+@{
+	int authorId = 1099; //default authorId here
+    string authorName ="";
+    string authorEmail ="";
+	string authorCity ="";
+	string authorOccupation ="";
+    string authorTwitterUsername ="";
+	string authorProfilePage ="";
+	string authorEmailHash ="";
+	
+	string authorBio = "";
+	string authorProfilePhoto ="";
+
+        authorId = (int)CurrentPage.writerMemberId;
+        var authorModel = Members.GetById(authorId);
+	
+		string authorImage = authorModel.GetCropUrl("picture", "100x100");
+		
+		// Using gravatar instead? Replace the line above with
+		// string authorImage = "https://www.gravatar.com/avatar/" + authorEmailHash + ".jpg?s=250";
+
+        authorName = authorModel.Name.ToString();
+		authorTwitterUsername =	(string)authorModel.GetProperty("twitterUsername").Value;
+		authorEmailHash = Umbraco.CreateMd5Hash(authorEmail);
+		//authorCity = (string)authorModel.GetProperty("city").Value;
+		authorOccupation = (string)authorModel.GetProperty("occupation").Value;
+		authorBio = (string)authorModel.GetProperty("bio").Value;
+	
+		var authorArticles = CurrentPage.Site().Descendants()
+			.Where("Visible")
+			.Where("DocumentTypeAlias == @0 || DocumentTypeAlias  == @1 || DocumentTypeAlias  == @2", "pageStandard", "pageNews", "pageMagazine")
+			.Where("author == @0", authorId)
+			.OrderBy("UpdateDate desc");
+
+    
+}  	
+
+<div class="bg-light-grey">
+	<div class="container m-b-2">
+		<div class="row">
+				<div class="col-md-12">
+					<img class="img-circle center-block" src="@authorImage" alt="Foto av @authorName">
+					<h1 class="article-title pagetitle">@authorName</h1>
+					<p class="lead">@authorBio</p>
+				</div>
+			</div>
+		</div>
+</div>
+<div class="container">
+	<div class="row">
+			@foreach(var item in authorArticles){
+				<div class="col-md-4">
+					@Umbraco.RenderMacro("ArticleCard", new {article=@item.Id})
+				</div>
+			}
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1 p-x-1 full-width">
+			@Html.Raw(CurrentPage.contentHtml)
+		</div>
+		<div class="col-md-3 col-md-offset-1">
+		</div>
+	</div>
+</div>	
+			
+
+		
+
+			
+			

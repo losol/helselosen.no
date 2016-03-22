@@ -11,7 +11,7 @@
 *.userprefs
 Web.Debug.config
 Web.Release.config
-ConnectionStrings.config
+#ConnectionStrings.config
 
 # Build results
 [Dd]ebug/

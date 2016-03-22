@@ -2942,6 +2942,45 @@
     <Content Include="Views\testView.cshtml" />
     <Content Include="Views\WebSite.cshtml" />
     <Content Include="Views\WriterPage.cshtml" />
+    <Content Include="Views\MacroPartials\Calculators\PregnancyCalculator.cshtml" />
+    <Content Include="Views\MacroPartials\Components\ArticleCard.cshtml" />
+    <Content Include="Views\MacroPartials\Components\ArticleList.cshtml" />
+    <Content Include="Views\MacroPartials\Components\AuthorCard.cshtml" />
+    <Content Include="Views\MacroPartials\Components\AuthorText.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Breadcrumb.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Card.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Carousel.cshtml" />
+    <Content Include="Views\MacroPartials\Components\ChildrenPagesCards.cshtml" />
+    <Content Include="Views\MacroPartials\Components\CommentBox.cshtml" />
+    <Content Include="Views\MacroPartials\Components\DescendantsCards.cshtml" />
+    <Content Include="Views\MacroPartials\Components\DescendantsMedialist.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Footer.cshtml" />
+    <Content Include="Views\MacroPartials\Components\FrontLatestArticles.cshtml" />
+    <Content Include="Views\MacroPartials\Components\FrontTop4.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Header.cshtml" />
+    <Content Include="Views\MacroPartials\Components\HeaderMagazine.cshtml" />
+    <Content Include="Views\MacroPartials\Components\HeaderMenu.cshtml" />
+    <Content Include="Views\MacroPartials\Components\HeaderNews.cshtml" />
+    <Content Include="Views\MacroPartials\Components\HtmlRaw.cshtml" />
+    <Content Include="Views\MacroPartials\Components\ImageCard.cshtml" />
+    <Content Include="Views\MacroPartials\Components\ImageCropped.cshtml" />
+    <Content Include="Views\MacroPartials\Components\ImageWithCaption.cshtml" />
+    <Content Include="Views\MacroPartials\Components\LicenseText.cshtml" />
+    <Content Include="Views\MacroPartials\Components\ListChildren.cshtml" />
+    <Content Include="Views\MacroPartials\Components\PagetitleAndSnippet.cshtml" />
+    <Content Include="Views\MacroPartials\Components\RelatedLinks.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Search.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Sitemap.cshtml" />
+    <Content Include="Views\MacroPartials\Components\TagList.cshtml" />
+    <Content Include="Views\MacroPartials\Components\Xtest.cshtml" />
+    <Content Include="Views\MacroPartials\Components\xx slett.cshtml" />
+    <Content Include="Views\MacroPartials\Components\xxx-ImageWithCaption.cshtml" />
+    <Content Include="Views\MacroPartials\Metadata\OpenGraphTags.cshtml" />
+    <Content Include="Views\MacroPartials\Metadata\TwitterCardTags.cshtml" />
+    <Content Include="Views\MacroPartials\Social\FacebookLikeFanpage.cshtml" />
+    <Content Include="Views\MacroPartials\Social\FacebookLikeUrl.cshtml" />
+    <Content Include="Views\MacroPartials\Social\Sharer.cshtml" />
+    <Content Include="Views\MacroPartials\Social\SocialLogin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2963,7 +3002,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="css\" />
     <Folder Include="scripts\" />
-    <Folder Include="Views\MacroPartials\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

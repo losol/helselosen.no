@@ -9,6 +9,8 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+helselosen.no/Web.Debug.config
+helselosen.no/Web.Release.config
 
 # Build results
 [Dd]ebug/
@@ -206,7 +208,5 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
-# LightSwitch generated files
-GeneratedArtifacts/
-_Pvt_Extensions/
-ModelManifest.xml
+
+
